@@ -4,9 +4,11 @@ MAX_RETRIES=30
 RETRY_INTERVAL=5
 IP_REGEX='^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
 
+[ $# -ne 1 ] && echo "ERROR:  Usage: $0 <mac_address>" && exit 1
+MACADDR=$1
 
 for ((i = 1; i <= MAX_RETRIES; i++)); do
-  address=$(arp-scan --localnet | grep "$1" | awk ' { printf $1 } ')
+  address=$(arp-scan --localnet | grep "$MACADDR" | awk ' { printf $MACADDR } ')
   
   if [[ -n "$address" && "$address" =~ $IP_REGEX ]]; then
     jq -n --arg address "$address" '{"address":$address}'

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+clear
+
+# terraform init if needed
+[ ! -d .terraform ] && echo "Need to run terraform init..." && terraform init -upgrade
+
+# Run terraform plan
+terraform plan -out tf-plan.out -no-color
+[ $? -ne 0 ] && echo "ERROR:  Failed to plan" && exit 1
+
+# Run terraform apply
+terraform apply tf-plan.out

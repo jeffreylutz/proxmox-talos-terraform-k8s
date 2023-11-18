@@ -87,6 +87,7 @@ fi
 
 imager_version=""
 for version in $(list_versions "siderolabs/imager"); do
+  echo "VERSION: $version"
   if [[ $version =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     imager_version="$version"
   fi

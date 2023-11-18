@@ -17,7 +17,7 @@ resource "proxmox_vm_qemu" "node" {
   target_node = var.target_node
 
   agent                  = 1
-  clone                  = "talos-golden"
+  clone                  = "talos-template"
   boot                   = "order=scsi0"
   cpu                    = "x86-64-v2"
   bios                   = "ovmf"
