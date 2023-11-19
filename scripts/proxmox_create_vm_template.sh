@@ -61,13 +61,15 @@ create_vm_template() {
     # Create proxmox vm template
     qm destroy ${MACHID} || true
     # NOTE:  Need to create with bios ovmf and machine=q35 for UEIF bios
+    # NOTE:  Talos REQUIRES bios.  It won't work with EUFI
+    # NOTE: EUFI: bios:ovmf, machine=q35, efidisk0: ${STORAGE_VOL}:1,efitype=4m,pre-enrolled-keys=1,size=1M
+    # NOTE: BOIS: bios: i440fx, machine=SeaBIOS
     qm create ${MACHID} \
-        --bios ovmf \
+        --bios seabios \
         --boot order=scsi0 \
         --cores 4 \
         --cpu cputype=x86-64-v2 \
-        --efidisk0 ${STORAGE_VOL}:1,efitype=4m,pre-enrolled-keys=1,size=1M \
-        --machine q35 \
+        --machine pc \
         --memory 4096 \
         --name talos-template \
         --net0 virtio,bridge=vmbr0 \
@@ -79,6 +81,8 @@ create_vm_template() {
     # For some unknown reason, specifying the SIZE in qm create --scsi0 is ignored
     qm resize 8000 scsi0 +100G
     rm -f ${IMG_LOCAL}
+
+    sleep 5
 }
 
 list_versions
